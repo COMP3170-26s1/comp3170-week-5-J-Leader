@@ -17,9 +17,10 @@ public class Flower extends SceneObject {
 	private static final String FRAGMENT_SHADER = "fragment.glsl";
 	private Shader shader;
 	
-	private final float HEIGHT = 1.0f;
-	private final float WIDTH = 0.1f;
+	private final float HEIGHT = 0.08f;
+	private final float WIDTH = 0.02f;
 	private Vector3f colour = new Vector3f(0f, 0.5f, 0f); // Dark Green
+	private Vector3f petalColour = new Vector3f(1f, 1f, 0f); // Bright Yellow
 
 	private Vector4f[] vertices;
 	private int vertexBuffer;
@@ -31,22 +32,22 @@ public class Flower extends SceneObject {
 	
 		// make the stem of the flower
 
-		// vertices for a wxh square with origin at the end
+		// vertices for a wxh square with origin at the top
 		// 
 		//  (-w/2, h)     (w/2, h)		
-		//       2-----------3
+		//       2-----*-----3
 		//       | \         |
 		//       |   \       |
 		//       |     \     |
 		//       |       \   |
 		//       |         \ |
-		//       0-----*-----1
+		//       0-----------1
 		//  (-w/2, 0)     (w/2, 0)	
 		
 		//@formatter:off
 		vertices = new Vector4f[] {
-			new Vector4f(-WIDTH / 2,           0, 0, 1),
-			new Vector4f( WIDTH / 2,           0, 0, 1),
+			new Vector4f(-WIDTH / 2,0, 0, 1),
+			new Vector4f( WIDTH / 2,0, 0, 1),
 			new Vector4f(-WIDTH / 2, HEIGHT, 0, 1),
 			new Vector4f( WIDTH / 2, HEIGHT, 0, 1),
 		};
@@ -59,6 +60,11 @@ public class Flower extends SceneObject {
 		};
 		    
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
+		//Make flower head here task 1??
+		FlowerHead flowerHead = new FlowerHead(nPetals, petalColour);
+		flowerHead.setParent(this);
+		flowerHead.getMatrix().translate(0f,HEIGHT,0.0f);
+		
 	}
 	
 	public void drawSelf(Matrix4f mvpMatrix) {
